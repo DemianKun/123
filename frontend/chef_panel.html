@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control Ejecutivo | KitchenCore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body style="padding-top: 1rem;">
+    <div class="mesh-bg"></div>
+
+    <nav class="navbar glass-panel">
+        <div class="logo">
+            <i class="fas fa-hat-chef" style="color: var(--primary-red);"></i> CHEF<span>DASHBOARD</span>
+        </div>
+        <div class="nav-links">
+            <span id="userNameDisplay" style="font-weight: 600; color: var(--text-muted);">Chef Ejecutivo</span>
+            <button onclick="app.logout()" class="btn btn-outline" style="padding: 0.5rem 1rem;">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </button>
+        </div>
+    </nav>
+
+    <div class="dashboard-grid">
+        <!-- Cadena de Frio -->
+        <div class="glass-panel dashboard-card" style="grid-column: span 12;">
+            <div class="card-header">
+                <h2><i class="fas fa-thermometer-half"></i> Monitoreo de Cadena de Frío</h2>
+                <div id="tempStatusPill" class="status-pill status-success">Sistema Estable</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <div class="temp-massive" id="tempDisplay">--.-°C</div>
+                    <p id="tempStatus" class="status-text" style="font-weight: 600;">Analizando sensores...</p>
+                </div>
+                <div style="flex: 1; min-width: 300px; height: 250px;">
+                    <canvas id="tempChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventario -->
+        <div class="glass-panel dashboard-card" style="grid-column: span 8;">
+            <div class="card-header">
+                <h2><i class="fas fa-boxes"></i> Inventario de Insumos Críticos</h2>
+                <button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                    <i class="fas fa-sync"></i> Actualizar
+                </button>
+            </div>
+            <div style="height: 200px; margin-bottom: 2rem;">
+                <canvas id="inventoryChart"></canvas>
+            </div>
+            <table class="premium-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Nivel Actual</th>
+                        <th>Umbral Mín.</th>
+                        <th>Estado IoT</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                    <!-- Dinámico -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pedidos y Usuarios -->
+        <div style="grid-column: span 4; display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="glass-panel dashboard-card" style="flex: 1;">
+                <div class="card-header">
+                    <h2><i class="fas fa-shopping-cart"></i> Pedidos Autónomos</h2>
+                </div>
+                <ul id="ordersList" class="data-list" style="list-style: none;">
+                    <!-- Dinámico -->
+                </ul>
+            </div>
+
+            <div class="glass-panel dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-user-plus"></i> Añadir Personal</h2>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="newCookUsername" placeholder="ID Cocinero" class="form-input">
+                </div>
+                <input type="password" id="newCookPassword" placeholder="Clave Temporal" class="form-input">
+                <button onclick="app.registerCookFromDashboard()" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    REGISTRAR <i class="fas fa-plus"></i>
+                </button>
+                <div id="dashboardNotification" class="notification-area hidden"></div>
+            </div>
+        </div>
+
+        <!-- Actividad Reciente -->
+        <div class="glass-panel dashboard-card" style="grid-column: span 12;">
+            <div class="card-header">
+                <h2><i class="fas fa-history"></i> Historial de Producción del Día</h2>
+            </div>
+            <div id="productionList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+                <!-- Dinámico -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if(user) document.getElementById('userNameDisplay').textContent = `Chef: ${user.username}`;
+            app.initChefDashboard();
+        });
+    </script>
+</body>
+</html>

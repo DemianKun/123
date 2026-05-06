@@ -1,0 +1,24 @@
+services:
+  # Servicio Backend (FastAPI + Prolog)
+  - type: web
+    name: iot-kitchen-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    envVars:
+      - key: ENV
+        value: production
+      - key: MONGO_URI
+        sync: false # Debes pegar tu URI real de MongoDB Atlas en el panel de Render
+      - key: JWT_SECRET_KEY
+        generateValue: true # Render generará una llave segura automáticamente
+      - key: FRONTEND_URL
+        sync: false # Debes configurarlo con la URL de Vercel una vez lo subas
+      - key: ADMIN_DEFAULT_PASSWORD
+        sync: false # Configura tu contraseña inicial
+      - key: TWILIO_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
